@@ -12,8 +12,8 @@
 
 <script>
 // Say something!
-var greeting = new SpeechSynthesisUtterance('Welcome to the Web Speech API');
-speechSynthesis.speak(greeting);  
+// var greeting = new SpeechSynthesisUtterance('Welcome to voice to image search. Speak a word.');
+// speechSynthesis.speak(greeting);  
 
 // Recognise the user's voice
 var recognition = new webkitSpeechRecognition();
@@ -36,7 +36,7 @@ recognition.onresult = function (event) {
 
   $.ajax({
   	url: 
-  	'https://www.googleapis.com/customsearch/v1?q=' + word + '&callback=myAmazingCallbackFunction&key=AIzaSyDQlJticGalN3TH8RhXb89f_SISjxpFRB8&searchType=image&cx=009116847362358943600:fff-shv6eh0',
+  	'https://www.googleapis.com/customsearch/v1?q=' + word + '&callback=myAmazingCallbackFunction&key=AIzaSyAUM6Wu4GZ-WWPud_z8_w-cgWPmVjitM80&searchType=image&cx=009116847362358943600:fff-shv6eh0',
   	success: function(images) {
   	console.log(images);
   	},
