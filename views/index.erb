@@ -46,12 +46,9 @@ recognition.onresult = function (event) {
 
 function myAmazingCallbackFunction(response) {
   var div = document.getElementById('images');
+  var image_index = Math.floor(Math.random() * response.items.length);
   div.innerHTML += "<h3>I think you said...</h3>";
-  div.innerHTML += "<img src='" + response.items[0].link + "'/>";
-  // for (i=0; i<response.items.length; i++) {
-  //   console.log(response.items[i].link);
-  //   div.innerHTML += "<img src='" + response.items[i].link + "'/>";
-  // }
+  div.innerHTML += "<img src='" + response.items[image_index].link + "'/>";
   console.log(response);
   }
   
