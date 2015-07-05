@@ -1,0 +1,72 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	</head>
+<body>
+  <main id="images">
+
+  </main>
+
+<script>
+// Say something!
+var greeting = new SpeechSynthesisUtterance('Welcome to the Web Speech API');
+speechSynthesis.speak(greeting);  
+
+// Recognise the user's voice
+var recognition = new webkitSpeechRecognition();
+recognition.continuous = false;
+recognition.interimResults = false;
+recognition.onresult = function (event) {
+  // Run this code everytime some speech is recognised
+  
+  var phrase = "";
+  for(var i = 0; i < event.results.length; i++) {
+    for(var j = 0; j < event.results[i].length; j++) {
+      phrase += event.results[i][j].transcript;  
+    };
+  };
+   var split_phrase = phrase.split(" ");
+  log(event);
+  log(split_phrase[0]);
+  var word = split_phrase[0];
+  console.log(word);
+
+  $.ajax({
+  	url: 
+  	'https://www.googleapis.com/customsearch/v1?q=' + word + '&callback=myAmazingCallbackFunction&key=AIzaSyDQlJticGalN3TH8RhXb89f_SISjxpFRB8&searchType=image&cx=009116847362358943600:fff-shv6eh0',
+  	success: function(images) {
+  	console.log(images);
+  	},
+  	error: function(response) {
+  	console.log(response)
+  	}
+	});
+};
+
+function myAmazingCallbackFunction(response) {
+  var div = document.getElementById('images');
+  div.innerHTML += "<h3>I think you said...</h3>";
+  div.innerHTML += "<img src='" + response.items[0].link + "'/>";
+  // for (i=0; i<response.items.length; i++) {
+  //   console.log(response.items[i].link);
+  //   div.innerHTML += "<img src='" + response.items[i].link + "'/>";
+  // }
+  console.log(response);
+  }
+  
+// Log any other events
+recognition.onstart = log;
+recognition.onerror = log;
+recognition.onend = log;
+recognition.start();
+
+function log(event) {
+  // Display useful information in the console
+  console.log(event)
+}
+
+</script>
+    
+</body>
+</html>
