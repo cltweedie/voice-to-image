@@ -5,7 +5,9 @@
 	</head>
 <body>
   <main id="images">
-
+    <div id="instruction">
+      <h1>Click 'allow', then speak a word into the microphone...</h1>
+    </div>
   </main>
 
 <script>
@@ -47,7 +49,7 @@ recognition.onresult = function (event) {
 function myAmazingCallbackFunction(response) {
   var div = document.getElementById('images');
   var image_index = Math.floor(Math.random() * response.items.length);
-  div.innerHTML += "<h3>I think you said...</h3>";
+  div.innerHTML = "<h3>I think you said...</h3>";
   div.innerHTML += "<img src='" + response.items[image_index].link + "'/>";
   console.log(response);
   }
