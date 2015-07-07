@@ -1,22 +1,29 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<link rel="stylesheet" type="text/css" href="main.css">
-	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-	</head>
+  <meta charset="UTF-8">
+  <title>Voice to Image</title>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
 <body>
   <main id="images">
     <div id="instruction">
       <h1>Click 'allow', then speak a word into the microphone...</h1>
+      <input type="radio" id="single_image" name="one_or_many" value="one" checked="checked" /> Single Image
+      <input type="radio" id="multiple_images" name="one_or_many" value="many" /> Multiple Images
     </div>
   </main>
 
-<script>
-// Say something!
-// var greeting = new SpeechSynthesisUtterance('Welcome to voice to image search. Speak a word.');
-// speechSynthesis.speak(greeting);  
+  <footer>
+
+  </footer>
+
+  <script>
 
 // Recognise the user's voice
 var recognition = new webkitSpeechRecognition();
+recognition.lang = "en-GB";                             // set the language to account for accent
 recognition.continuous = false;
 recognition.interimResults = false;
 recognition.onresult = function (event) {
@@ -28,7 +35,7 @@ recognition.onresult = function (event) {
       phrase += event.results[i][j].transcript;  
     };
   };
-   var split_phrase = phrase.split(" ");
+  var split_phrase = phrase.split(" ");
   log(event);
   log(split_phrase[0]);
   var word = split_phrase[0];
@@ -38,22 +45,39 @@ recognition.onresult = function (event) {
   	url: 
   	'https://www.googleapis.com/customsearch/v1?q=' + word + '&callback=myAmazingCallbackFunction&key=AIzaSyAUM6Wu4GZ-WWPud_z8_w-cgWPmVjitM80&searchType=image&cx=009116847362358943600:fff-shv6eh0',
   	success: function(images) {
-  	console.log(images);
-  	},
-  	error: function(response) {
-  	console.log(response)
-  	}
-	});
+     console.log(images);
+   },
+   error: function(response) {
+     console.log(response)
+   }
+ });
 };
 
 function myAmazingCallbackFunction(response) {
   var div = document.getElementById('images');
-  var image_index = Math.floor(Math.random() * response.items.length);
-  div.innerHTML = "<h3>I think you said...</h3>";
-  div.innerHTML += "<img src='" + response.items[image_index].link + "'/>";
-  console.log(response);
+  var checked = $('input[name="one_or_many"]:checked').val();
+  div.innerHTML = "<h1>I think you said...</h1>";
+  console.log(checked);
+
+  // check whether 'single image' or 'multiple images' is checked
+  if (checked == "one") {
+    console.log("Single image selected");
+    var image_index = Math.floor(Math.random() * response.items.length);  
+    div.innerHTML += "<img src='" + response.items[image_index].link + "'/>";
+  } else {
+    console.log("Multiple images selected");
+    for (i=0; i<response.items.length; i++) {
+      div.innerHTML += "<img src='" + response.items[i].link + "'/>";
+    }
+        // change the width of the div and images
+    $('#images').css('width', '80%');
+    $('#images img').css('width', '33%');
   }
-  
+  div.innerHTML += "<h2>Hit 'refresh' to try again.</h2>";
+  $('footer').html('<a href="/how">How does this work?</a>');
+  console.log(response);
+}
+
 // Log any other events
 recognition.onstart = log;
 recognition.onerror = log;
@@ -66,6 +90,6 @@ function log(event) {
 }
 
 </script>
-    
+
 </body>
 </html>
